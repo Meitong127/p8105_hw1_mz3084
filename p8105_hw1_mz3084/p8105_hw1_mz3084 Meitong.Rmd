@@ -1,0 +1,93 @@
+---
+title: "P8105 Homework 1"
+author: "Meitong Zhou"
+date: "2024-09-15"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r, echo = FALSE, message=FALSE}
+library(ggplot2)
+library(tidyverse)
+```
+
+## Q1 
+**Load the penguins dataset**
+
+
+```{r load the penguins dataset}
+data("penguins", package = "palmerpenguins")
+nrow(penguins)
+ncol(penguins)
+mean(penguins$flipper_length_mm, na.rm = TRUE)
+```
+
+The `penguins` dataset includes the variables `species`, `island`, `bill_length_mm`, `bill_depth_mm`, `flipper_length_mm`, `body_mass_g`, `sex`, and `year`. The dataset has 344 rows and 8 columns. The mean flipper length is approximately 200.9152 mm.
+
+**Plot**
+```{r}
+scatter_plot= ggplot(penguins, aes(x = bill_length_mm, y = flipper_length_mm, color = species)) +
+  geom_point() 
+scatter_plot
+ggsave("scatter_plot.png")
+```
+## Q2
+
+set up the data frame.
+```{r}
+set.seed(8888)
+## set seed to ensure reproducibility
+
+df= tibble(
+  ran_var= rnorm(10), 
+  logical_vector = ran_var > 0,
+  char_vector= letters[1:10],                        
+  factor_vector= gl(3,3, length=10, labels = c("level1", "level2", "level3"))
+)
+
+df
+```
+Find the mean by numeric non-number variables.
+```{r, results = 'hide'}
+
+set.seed(8888)
+# convert character and factor into numeric
+numeric_character = as.numeric(pull(df, char_vector), na.rm = TRUE)  
+numeric_factor = as.numeric(pull(df, factor_vector), na.rm = TRUE) 
+
+# Attempt to take the mean of each variable
+mean_ran_var = mean(pull(df, ran_var)) 
+mean_logical = mean(pull(df, logical_vector))  
+mean_character = mean(numeric_character) 
+mean_factor = mean(numeric_factor)
+
+# Display the results
+mean_ran_var
+mean_logical
+mean_character
+mean_factor
+```
+
